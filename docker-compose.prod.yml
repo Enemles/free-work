@@ -20,6 +20,6 @@ services:
       - NODE_ENV=production
     ports:
       - 3000:3000
-    env_file: .env
+    env_file: .env.local
     depends_on:
       - postgres
