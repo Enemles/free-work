@@ -8,84 +8,86 @@ generator client {
 }
 
 model User {
-  id                Int      @id @default(autoincrement())
-  email             String   @unique
+  id                Int           @id @default(autoincrement())
+  email             String        @unique
   password          String
   firstName         String
   lastName          String
   bio               String?
   location          String?
   profilePictureUrl String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
   Projects          Project[]
   Applications      Application[]
-  MessagesSent      Message[] @relation("MessagesSent")
-  MessagesReceived  Message[] @relation("MessagesReceived")
-  ReviewsWritten    Review[] @relation("ReviewsWritten")
-  ReviewsReceived   Review[] @relation("ReviewsReceived")
+  MessagesSent      Message[]     @relation("MessagesSent")
+  MessagesReceived  Message[]     @relation("MessagesReceived")
+  ReviewsWritten    Review[]      @relation("ReviewsWritten")
+  ReviewsReceived   Review[]      @relation("ReviewsReceived")
+  Skills            UserSkill[] // Ajout de la relation opposée
 }
 
 model Project {
-  id          Int          @id @default(autoincrement())
-  clientId    Int
-  title       String
-  description String
-  budget      Float
-  status      String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  Client      User         @relation(fields: [clientId], references: [id])
+  id           Int           @id @default(autoincrement())
+  clientId     Int
+  title        String
+  description  String
+  budget       Float
+  status       String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Client       User          @relation(fields: [clientId], references: [id])
   Applications Application[]
-  Reviews     Review[]
+  Reviews      Review[]
 }
 
 model Application {
-  id            Int      @id @default(autoincrement())
-  projectId     Int
-  freelancerId  Int
-  coverLetter   String
-  status        String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  Project       Project  @relation(fields: [projectId], references: [id])
-  Freelancer    User     @relation(fields: [freelancerId], references: [id])
+  id           Int      @id @default(autoincrement())
+  projectId    Int
+  freelancerId Int
+  coverLetter  String
+  status       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Project      Project  @relation(fields: [projectId], references: [id])
+  Freelancer   User     @relation(fields: [freelancerId], references: [id])
 }
 
 model Message {
-  id          Int      @id @default(autoincrement())
-  senderId    Int
-  receiverId  Int
-  content     String
-  createdAt   DateTime @default(now())
-  Sender      User     @relation("MessagesSent", fields: [senderId], references: [id])
-  Receiver    User     @relation("MessagesReceived", fields: [receiverId], references: [id])
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  content    String
+  createdAt  DateTime @default(now())
+  Sender     User     @relation("MessagesSent", fields: [senderId], references: [id])
+  Receiver   User     @relation("MessagesReceived", fields: [receiverId], references: [id])
 }
 
 model Review {
-  id          Int      @id @default(autoincrement())
-  projectId   Int
-  reviewerId  Int
-  reviewedId  Int
-  rating      Int
-  comment     String
-  createdAt   DateTime @default(now())
-  Project     Project  @relation(fields: [projectId], references: [id])
-  Reviewer    User     @relation("ReviewsWritten", fields: [reviewerId], references: [id])
-  Reviewed    User     @relation("ReviewsReceived", fields: [reviewedId], references: [id])
+  id         Int      @id @default(autoincrement())
+  projectId  Int
+  reviewerId Int
+  reviewedId Int
+  rating     Int
+  comment    String
+  createdAt  DateTime @default(now())
+  Project    Project  @relation(fields: [projectId], references: [id])
+  Reviewer   User     @relation("ReviewsWritten", fields: [reviewerId], references: [id])
+  Reviewed   User     @relation("ReviewsReceived", fields: [reviewedId], references: [id])
 }
 
 model Skill {
-  id    Int     @id @default(autoincrement())
+  id    Int         @id @default(autoincrement())
   name  String
   Users UserSkill[]
 }
 
 model UserSkill {
-  userId        Int
-  skillId       Int
+  userId           Int
+  skillId          Int
   proficiencyLevel String
-  User          User  @relation(fields: [userId], references: [id])
-  Skill         Skill @relation(fields: [skillId], references: [id])
+  User             User   @relation(fields: [userId], references: [id])
+  Skill            Skill  @relation(fields: [skillId], references: [id])
+
   @@id([userId, skillId])
 }
