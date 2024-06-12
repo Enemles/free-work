@@ -18,7 +18,7 @@ services:
       context: .
       target: dev
     restart: always
-    command: npm run docker:dev
+    command: sh -c "npx prisma migrate deploy && npm run docker:dev"
     environment:
       - NODE_ENV=development
     ports:
