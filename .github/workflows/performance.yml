@@ -1,4 +1,4 @@
-name: Build and Test
+name: Performance and E2E Tests
 
 on:
   push:
@@ -6,7 +6,25 @@ on:
       - dev
 
 jobs:
-  build:
+  performance-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run performance tests
+        run: npm run test:performance
+
+  e2e-tests:
     runs-on: ubuntu-latest
 
     services:
@@ -36,20 +54,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build the project
-        run: npm run build
+      - name: Start application
+        run: npm start &
 
-      - name: Run unit tests
-        run: npm run test:unit
-
-      - name: Run API tests
-        run: npm run test:api
-
-      - name: Package application
-        run: npm run package
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: ./dist
+      - name: Run E2E tests
+        run: npm run test:e2e
