@@ -16,6 +16,7 @@ model User {
   bio               String?
   location          String?
   profilePictureUrl String?
+  tjm               Float?
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   Projects          Project[]
