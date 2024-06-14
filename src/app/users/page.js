@@ -85,7 +85,7 @@ export default function Users() {
           value={profilePictureUrl}
           onChange={(e) => setProfilePictureUrl(e.target.value)}
         />
-        <button className='bg-white text-white ' type="submit">Ajouter</button>
+        <button className='text-white bg-white ' type="submit">Ajouter</button>
       </form>
     </div>
   );
