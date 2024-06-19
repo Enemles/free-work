@@ -8,7 +8,6 @@ async function main() {
   const users = [
     {
       email: 'user1@example.com',
-      password: 'password1',
       firstName: 'John',
       lastName: 'Doe',
       bio: 'Bio of John Doe',
@@ -17,7 +16,6 @@ async function main() {
     },
     {
       email: 'user2@example.com',
-      password: 'password2',
       firstName: 'Jane',
       lastName: 'Smith',
       bio: 'Bio of Jane Smith',
@@ -26,7 +24,6 @@ async function main() {
     },
     {
       email: 'user3@example.com',
-      password: 'password3',
       firstName: 'Alice',
       lastName: 'Johnson',
       bio: 'Bio of Alice Johnson',

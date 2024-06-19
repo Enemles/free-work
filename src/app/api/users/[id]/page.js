@@ -25,11 +25,11 @@ export async function PUT(req, { params }) {
   try {
     const { id } = params;
     const body = await req.json();
-    const { email, password, firstName, lastName, bio, location, profilePictureUrl } = body;
+    const { email, firstName, lastName, bio, location, profilePictureUrl } = body;
 
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
-      data: { email, password, firstName, lastName, bio, location, profilePictureUrl },
+      data: { email, firstName, lastName, bio, location, profilePictureUrl },
     });
 
     return new Response(JSON.stringify(updatedUser), { status: 200 });

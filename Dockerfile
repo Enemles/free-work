@@ -17,7 +17,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Uncomment this if you're using prisma, generates prisma files for linting
-# RUN npx prisma generate
+RUN npx prisma generate
 
 #Enables Hot Reloading Check https://github.com/vercel/next.js/issues/36774 for more information
 ENV CHOKIDAR_USEPOLLING=true
