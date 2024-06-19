@@ -44,12 +44,12 @@ export async function PUT(req) {
     const githubId = token.sub;
     console.log('GitHub ID:', githubId);
 
-    const { firstName, lastName, bio, location, profilePictureUrl } = await req.json();
-    console.log('Request body:', { firstName, lastName, bio, location, profilePictureUrl });
+    const { firstName, lastName, bio, location, profilePictureUrl, role } = await req.json();
+    console.log('Request body:', { firstName, lastName, bio, location, profilePictureUrl, role });
 
     const user = await prisma.user.update({
       where: { githubId: githubId },
-      data: { firstName, lastName, bio, location, profilePictureUrl },
+      data: { firstName, lastName, bio, location, profilePictureUrl, role },
     });
     console.log('Updated user:', user);
 

@@ -1,8 +1,8 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import GithubProvider from 'next-auth/providers/github';
-import { prisma } from "../../../../lib/prisma"; // Utilisation de l'alias @/lib
+import { prisma } from "../../../../lib/prisma";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -14,10 +14,10 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, profile }) {
       const githubId = profile.id.toString();
 
-      const existingUser = await prisma.user.findUnique({
+      let existingUser = await prisma.user.findUnique({
         where: { email: user.email },
       });
 
@@ -27,31 +27,28 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             firstName: profile.name?.split(' ')[0],
             lastName: profile.name?.split(' ')[1],
-            profilePictureUrl: profile.image,
-            bio: '',
-            location: '',
-            githubId: githubId,
-          },
-        });
-      } else {
-        await prisma.user.update({
-          where: { email: user.email },
-          data: {
+            profilePictureUrl: profile.avatar_url,
             githubId: githubId,
           },
         });
       }
+
       return true;
     },
     async session({ session, token }) {
       session.user.id = token.id;
+      session.user.role = token.role;
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
       }
       return token;
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
   },
 };

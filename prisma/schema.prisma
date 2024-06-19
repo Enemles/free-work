@@ -18,6 +18,7 @@ model User {
   location          String?
   profilePictureUrl String?
   updatedAt         DateTime?       @updatedAt
+  role              String?          
   accounts          Account[]
   Applications      Application[]
   Authenticator     Authenticator[]
@@ -29,7 +30,6 @@ model User {
   sessions          Session[]
   Skills            UserSkill[]
 }
-
 
 model Project {
   id           Int           @id @default(autoincrement())

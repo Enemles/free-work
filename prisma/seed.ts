@@ -13,6 +13,7 @@ async function main() {
       bio: 'Bio of John Doe',
       location: 'New York',
       profilePictureUrl: 'https://example.com/profile1.jpg',
+      role: 'freelance',
     },
     {
       email: 'user2@example.com',
@@ -21,23 +22,48 @@ async function main() {
       bio: 'Bio of Jane Smith',
       location: 'Los Angeles',
       profilePictureUrl: 'https://example.com/profile2.jpg',
+      role: 'client',
+    }
+  ];
+
+  const createdUsers = [];
+  for (const user of users) {
+    const createdUser = await prisma.user.create({
+      data: user,
+    });
+    createdUsers.push(createdUser);
+  }
+
+  // Crée des projets associés aux utilisateurs créés
+  const projects = [
+    {
+      title: 'Projet 1',
+      description: 'Description du Projet 1',
+      budget: 1000,
+      status: 'Ouvert',
+      clientId: 2,
     },
     {
-      email: 'user3@example.com',
-      firstName: 'Alice',
-      lastName: 'Johnson',
-      bio: 'Bio of Alice Johnson',
-      location: 'Chicago',
-      profilePictureUrl: 'https://example.com/profile3.jpg',
+      title: 'Projet 2',
+      description: 'Description du Projet 2',
+      budget: 2000,
+      status: 'En cours',
+      clientId: 1,
+    },
+    {
+      title: 'Projet 3',
+      description: 'Description du Projet 3',
+      budget: 3000,
+      status: 'Fermé',
+      clientId: 2,
     },
   ];
 
-  for (const user of users) {
-    await prisma.user.create({
-      data: user,
+  for (const project of projects) {
+    await prisma.project.create({
+      data: project,
     });
   }
-
   console.log('Database seeded!');
 }
 

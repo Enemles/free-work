@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 const Profile = () => {
   const { data: session } = useSession();
@@ -10,6 +10,7 @@ const Profile = () => {
     bio: '',
     location: '',
     profilePictureUrl: '',
+    role: '',
   });
   const [error, setError] = useState(null);
 
@@ -21,7 +22,14 @@ const Profile = () => {
           throw new Error('Failed to fetch profile');
         }
         const data = await res.json();
-        setProfile(data);
+        setProfile({
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
+          bio: data.bio || '',
+          location: data.location || '',
+          profilePictureUrl: data.profilePictureUrl || '',
+          role: data.role || '',
+        });
       } catch (error) {
         setError(error.message);
       }
@@ -51,7 +59,14 @@ const Profile = () => {
         throw new Error('Failed to update profile');
       }
       const data = await res.json();
-      setProfile(data);
+      setProfile({
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        bio: data.bio || '',
+        location: data.location || '',
+        profilePictureUrl: data.profilePictureUrl || '',
+        role: data.role || '',
+      });
     } catch (error) {
       setError(error.message);
     }
@@ -109,6 +124,14 @@ const Profile = () => {
             value={profile.profilePictureUrl}
             onChange={handleChange}
           />
+        </div>
+        <div>
+          <label>Rôle</label>
+          <select name="role" value={profile.role} onChange={handleChange}>
+            <option value="">Sélectionner un rôle</option>
+            <option value="freelance">Freelance</option>
+            <option value="client">Client</option>
+          </select>
         </div>
         <button type="submit">Enregistrer</button>
       </form>

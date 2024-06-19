@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <main>
-      <LoginButton />
+      <LoginButton/>
       <LogoutButton />
       <h2>Server Session</h2>
       <pre>{JSON.stringify(session)}</pre>
