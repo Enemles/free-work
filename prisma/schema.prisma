@@ -20,11 +20,12 @@ model User {
   updatedAt         DateTime?       @updatedAt
   role              String?
   accounts          Account[]
+  tjm               Float?
+  Projects          Project[]
   Applications      Application[]
   Authenticator     Authenticator[]
   MessagesReceived  Message[]       @relation("MessagesReceived")
   MessagesSent      Message[]       @relation("MessagesSent")
-  Projects          Project[]
   ReviewsReceived   Review[]        @relation("ReviewsReceived")
   ReviewsWritten    Review[]        @relation("ReviewsWritten")
   sessions          Session[]

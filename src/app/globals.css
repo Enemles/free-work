@@ -8,3 +8,9 @@
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .container {
+    @apply max-w-screen-xl px-5 mx-auto md:px-20;
+  }
+}
