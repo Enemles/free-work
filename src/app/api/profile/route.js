@@ -7,25 +7,58 @@ const secret = process.env.NEXTAUTH_SECRET;
 export async function GET(req) {
   try {
     const token = await getToken({ req, secret });
-    console.log('Token:', token);
-
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const githubId = token.sub;
-    console.log('GitHub ID:', githubId);
-
     const user = await prisma.user.findUnique({
-      where: { githubId: githubId },
+      where: { id: token.id },
+      include: {
+        followers: {
+          include: {
+            Follower: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        following: {
+          include: {
+            Following: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
     });
-    console.log('User:', user);
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(user, { status: 200 });
+    // Transform the response to add a "following" field for each user
+    const followers = user.followers.map(follower => ({
+      ...follower.Follower,
+      isFollowing: user.following.some(f => f.followingId === follower.Follower.id),
+    }));
+
+    const following = user.following.map(following => ({
+      ...following.Following,
+      isFollowing: user.following.some(f => f.followingId === following.Following.id),
+    }));
+
+    return NextResponse.json({
+      ...user,
+      followers,
+      following,
+    }, { status: 200 });
   } catch (error) {
     console.error('GET Error:', error);
     return NextResponse.json({ error: 'Erreur lors de la récupération du profil' }, { status: 500 });
@@ -35,23 +68,16 @@ export async function GET(req) {
 export async function PUT(req) {
   try {
     const token = await getToken({ req, secret });
-    console.log('Token:', token);
-
     if (!token) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const githubId = token.sub;
-    console.log('GitHub ID:', githubId);
-
     const { firstName, lastName, bio, location, profilePictureUrl, role } = await req.json();
-    console.log('Request body:', { firstName, lastName, bio, location, profilePictureUrl, role });
 
     const user = await prisma.user.update({
-      where: { githubId: githubId },
+      where: { id: token.id },
       data: { firstName, lastName, bio, location, profilePictureUrl, role },
     });
-    console.log('Updated user:', user);
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {

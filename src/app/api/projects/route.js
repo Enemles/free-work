@@ -11,16 +11,15 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const githubId = token.id;
+    const clientId = token.id;
     const user = await prisma.user.findUnique({
-      where: { githubId: githubId },
+      where: { id : clientId},
     });
 
     if (!user) {
       return NextResponse.json({ message: 'Utilisateur non trouvé' }, { status: 404 });
     }
 
-    const clientId = user.id;
     const { title, description, budget, status } = await req.json();
 
     // Ajout de journalisation pour vérifier les données reçues
@@ -47,14 +46,36 @@ export async function POST(req) {
   }
 }
 
-
-
-// GET /api/projects - Récupérer tous les projets
-export async function GET(req) {
+export async function GET() {
   try {
-    const projects = await prisma.project.findMany();
+    const projects = await prisma.project.findMany({
+      include: {
+        likes: {
+          include: {
+            User: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        comments: {
+          include: {
+            User: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     return NextResponse.json(projects, { status: 200 });
   } catch (error) {
+    console.error('GET Error:', error);
     return NextResponse.json({ error: 'Erreur lors de la récupération des projets' }, { status: 500 });
   }
 }

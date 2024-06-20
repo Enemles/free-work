@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  email             String          @unique
   id                Int             @id @default(autoincrement())
+  email             String          @unique
   githubId          String?         @unique
   bio               String?
   createdAt         DateTime        @default(now())
@@ -18,7 +18,7 @@ model User {
   location          String?
   profilePictureUrl String?
   updatedAt         DateTime?       @updatedAt
-  role              String?          
+  role              String?
   accounts          Account[]
   Applications      Application[]
   Authenticator     Authenticator[]
@@ -29,6 +29,10 @@ model User {
   ReviewsWritten    Review[]        @relation("ReviewsWritten")
   sessions          Session[]
   Skills            UserSkill[]
+  likes             Like[]
+  comments          Comment[]
+  followers         Follow[]        @relation("following")
+  following         Follow[]        @relation("followers")
 }
 
 model Project {
@@ -43,6 +47,41 @@ model Project {
   Applications Application[]
   Client       User          @relation(fields: [clientId], references: [id])
   Reviews      Review[]
+  likes        Like[]
+  comments     Comment[]
+}
+
+model Like {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  createdAt DateTime  @default(now())
+  User      User      @relation(fields: [userId], references: [id])
+  Project   Project   @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String
+  userId    Int
+  projectId Int
+  createdAt DateTime  @default(now())
+  User      User      @relation(fields: [userId], references: [id])
+  Project   Project   @relation(fields: [projectId], references: [id])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+  Follower    User     @relation("followers", fields: [followerId], references: [id])
+  Following   User     @relation("following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId]) // Ajout de cette ligne pour définir la contrainte unique
 }
 
 model Application {

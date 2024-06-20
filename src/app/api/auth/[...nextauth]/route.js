@@ -22,7 +22,7 @@ export const authOptions = {
       });
 
       if (!existingUser) {
-        await prisma.user.create({
+        existingUser = await prisma.user.create({
           data: {
             email: user.email,
             firstName: profile.name?.split(' ')[0],
@@ -42,8 +42,12 @@ export const authOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        const userRecord = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        token.id = userRecord.id;
+        token.role = userRecord.role;
       }
       return token;
     },

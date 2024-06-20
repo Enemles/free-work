@@ -12,7 +12,7 @@ async function main() {
       lastName: 'Doe',
       bio: 'Bio of John Doe',
       location: 'New York',
-      profilePictureUrl: 'https://example.com/profile1.jpg',
+      profilePictureUrl: 'https://picsum.photos/50',
       role: 'freelance',
     },
     {
@@ -21,7 +21,7 @@ async function main() {
       lastName: 'Smith',
       bio: 'Bio of Jane Smith',
       location: 'Los Angeles',
-      profilePictureUrl: 'https://example.com/profile2.jpg',
+      profilePictureUrl: 'https://picsum.photos/50',
       role: 'client',
     }
   ];

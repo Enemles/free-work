@@ -24,14 +24,20 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
+    const token = await getToken({ req, secret });
+    if (!token) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const { id } = params;
     const { title, description, budget, status } = await req.json();
+
     const project = await prisma.project.update({
       where: { id: parseInt(id, 10) },
       data: {
         title,
         description,
-        budget,
+        budget: parseFloat(budget), // Conversion de budget en Float
         status,
       },
     });
@@ -45,7 +51,13 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
+    const token = await getToken({ req, secret });
+    if (!token) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const { id } = params;
+
     await prisma.project.delete({
       where: { id: parseInt(id, 10) },
     });

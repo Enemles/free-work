@@ -1,6 +1,7 @@
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const Profile = () => {
   const { data: session } = useSession();
@@ -11,30 +12,34 @@ const Profile = () => {
     location: '',
     profilePictureUrl: '',
     role: '',
+    followers: [],
+    following: [],
   });
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch('/api/profile');
-        if (!res.ok) {
-          throw new Error('Failed to fetch profile');
-        }
-        const data = await res.json();
-        setProfile({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          bio: data.bio || '',
-          location: data.location || '',
-          profilePictureUrl: data.profilePictureUrl || '',
-          role: data.role || '',
-        });
-      } catch (error) {
-        setError(error.message);
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch('/api/profile');
+      if (!res.ok) {
+        throw new Error('Failed to fetch profile');
       }
-    };
+      const data = await res.json();
+      setProfile({
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        bio: data.bio || '',
+        location: data.location || '',
+        profilePictureUrl: data.profilePictureUrl || '',
+        role: data.role || '',
+        followers: data.followers || [],
+        following: data.following || [],
+      });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
+  useEffect(() => {
     if (session) {
       fetchProfile();
     }
@@ -66,7 +71,37 @@ const Profile = () => {
         location: data.location || '',
         profilePictureUrl: data.profilePictureUrl || '',
         role: data.role || '',
+        followers: data.followers || [],
+        following: data.following || [],
       });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleFollow = async (userId) => {
+    try {
+      const res = await fetch(`/api/users/${userId}/follow`, {
+        method: 'POST',
+      });
+      if (!res.ok) {
+        throw new Error('Failed to follow user');
+      }
+      fetchProfile();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleUnfollow = async (userId) => {
+    try {
+      const res = await fetch(`/api/users/${userId}/unfollow`, {
+        method: 'POST',
+      });
+      if (!res.ok) {
+        throw new Error('Failed to unfollow user');
+      }
+      fetchProfile();
     } catch (error) {
       setError(error.message);
     }
@@ -80,7 +115,7 @@ const Profile = () => {
     <div>
       <h1>Mon Profil</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form className='text-black' onSubmit={handleSubmit}>
+      <form className="text-black" onSubmit={handleSubmit}>
         <div>
           <label>Prénom</label>
           <input
@@ -101,11 +136,7 @@ const Profile = () => {
         </div>
         <div>
           <label>Bio</label>
-          <textarea
-            name="bio"
-            value={profile.bio}
-            onChange={handleChange}
-          />
+          <textarea name="bio" value={profile.bio} onChange={handleChange} />
         </div>
         <div>
           <label>Location</label>
@@ -135,6 +166,40 @@ const Profile = () => {
         </div>
         <button type="submit">Enregistrer</button>
       </form>
+
+      <div>
+        <h2>Followers ({profile.followers.length})</h2>
+        <ul>
+          {profile.followers.map((follower) => (
+            <li key={follower.id}>
+              <Link href={`/profile/${follower.id}`}>
+                {follower.firstName} {follower.lastName}
+              </Link>
+              {profile.following.some(f => f.id === follower.id) ? (
+                <button onClick={() => handleUnfollow(follower.id)}>Arrêter de suivre</button>
+              ) : (
+                <button onClick={() => handleFollow(follower.id)}>Suivre</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2>Following ({profile.following.length})</h2>
+        <ul>
+          {profile.following.map((following) => (
+            <li key={following.id}>
+              <Link href={`/profile/${following.id}`}>
+                {following.firstName} {following.lastName}
+              </Link>
+              <button onClick={() => handleUnfollow(following.id)}>
+                Arrêter de suivre
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
