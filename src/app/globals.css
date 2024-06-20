@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --white: 241, 241, 241;
-  --black: 10, 10, 10;
-}
-
-body {
-  color: var(--black);
-  background: var(--white);
-  font-family: 'Nunito';
-}
 
 @layer utilities {
   .text-balance {

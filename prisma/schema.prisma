@@ -1,31 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id                Int           @id @default(autoincrement())
-  email             String        @unique
-  password          String
-  firstName         String
-  lastName          String
+  id                Int             @id @default(autoincrement())
+  email             String          @unique
+  githubId          String?         @unique
   bio               String?
+  createdAt         DateTime        @default(now())
+  firstName         String?
+  lastName          String?
   location          String?
   profilePictureUrl String?
+  updatedAt         DateTime?       @updatedAt
+  role              String?
+  accounts          Account[]
   tjm               Float?
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
   Projects          Project[]
   Applications      Application[]
-  MessagesSent      Message[]     @relation("MessagesSent")
-  MessagesReceived  Message[]     @relation("MessagesReceived")
-  ReviewsWritten    Review[]      @relation("ReviewsWritten")
-  ReviewsReceived   Review[]      @relation("ReviewsReceived")
-  Skills            UserSkill[] // Ajout de la relation opposée
+  Authenticator     Authenticator[]
+  MessagesReceived  Message[]       @relation("MessagesReceived")
+  MessagesSent      Message[]       @relation("MessagesSent")
+  ReviewsReceived   Review[]        @relation("ReviewsReceived")
+  ReviewsWritten    Review[]        @relation("ReviewsWritten")
+  sessions          Session[]
+  Skills            UserSkill[]
+  likes             Like[]
+  comments          Comment[]
+  followers         Follow[]        @relation("following")
+  following         Follow[]        @relation("followers")
 }
 
 model Project {
@@ -37,9 +45,44 @@ model Project {
   status       String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  Client       User          @relation(fields: [clientId], references: [id])
   Applications Application[]
+  Client       User          @relation(fields: [clientId], references: [id])
   Reviews      Review[]
+  likes        Like[]
+  comments     Comment[]
+}
+
+model Like {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  createdAt DateTime  @default(now())
+  User      User      @relation(fields: [userId], references: [id])
+  Project   Project   @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String
+  userId    Int
+  projectId Int
+  createdAt DateTime  @default(now())
+  User      User      @relation(fields: [userId], references: [id])
+  Project   Project   @relation(fields: [projectId], references: [id])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+  Follower    User     @relation("followers", fields: [followerId], references: [id])
+  Following   User     @relation("following", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId]) // Ajout de cette ligne pour définir la contrainte unique
 }
 
 model Application {
@@ -50,8 +93,8 @@ model Application {
   status       String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  Project      Project  @relation(fields: [projectId], references: [id])
   Freelancer   User     @relation(fields: [freelancerId], references: [id])
+  Project      Project  @relation(fields: [projectId], references: [id])
 }
 
 model Message {
@@ -60,8 +103,8 @@ model Message {
   receiverId Int
   content    String
   createdAt  DateTime @default(now())
-  Sender     User     @relation("MessagesSent", fields: [senderId], references: [id])
   Receiver   User     @relation("MessagesReceived", fields: [receiverId], references: [id])
+  Sender     User     @relation("MessagesSent", fields: [senderId], references: [id])
 }
 
 model Review {
@@ -73,8 +116,8 @@ model Review {
   comment    String
   createdAt  DateTime @default(now())
   Project    Project  @relation(fields: [projectId], references: [id])
-  Reviewer   User     @relation("ReviewsWritten", fields: [reviewerId], references: [id])
   Reviewed   User     @relation("ReviewsReceived", fields: [reviewedId], references: [id])
+  Reviewer   User     @relation("ReviewsWritten", fields: [reviewerId], references: [id])
 }
 
 model Skill {
@@ -87,8 +130,58 @@ model UserSkill {
   userId           Int
   skillId          Int
   proficiencyLevel String
-  User             User   @relation(fields: [userId], references: [id])
   Skill            Skill  @relation(fields: [skillId], references: [id])
+  User             User   @relation(fields: [userId], references: [id])
 
   @@id([userId, skillId])
+}
+
+model Account {
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               Int
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
