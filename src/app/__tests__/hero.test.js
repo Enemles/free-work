@@ -1,6 +1,5 @@
-import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react';
-import Hero from '../src/app/components/hero';
+import Hero from '../components/hero';
 
 describe('Hero component', () => {
   it('renders the Hero form', () => {
