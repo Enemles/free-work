@@ -3,6 +3,8 @@ import { authOptions } from './api/auth/[...nextauth]/route'
 import Link from 'next/link'
 import UserList from './components/UserList'
 import { LoginButton, LogoutButton } from './auth'
+import Hero from './components/hero'
+import CtaChoice from './components/cta-choice'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
@@ -34,6 +36,8 @@ export default async function Home() {
         </ul>
       </nav>
       <UserList />
+      <Hero text="I am looking for " />
+        <CtaChoice />
     </main>
   )
 }
