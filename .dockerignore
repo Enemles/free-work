@@ -9,4 +9,5 @@ docker-compose.yml
 .prettier
 npm-debug.log
 yarn-error.log
+.env
 next-env.d.ts
