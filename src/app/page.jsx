@@ -1,43 +1,40 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from './api/auth/[...nextauth]/route'
-import Link from 'next/link'
-import UserList from './components/UserList'
-import { LoginButton, LogoutButton } from './auth'
-import Hero from './components/hero'
-import CtaChoice from './components/cta-choice'
+'use client';
 
-export default async function Home() {
-  const session = await getServerSession(authOptions)
+import { useState } from 'react';
+import Link from 'next/link';
+import UserList from './components/UserList';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import CtaChoice from './components/CtaChoice';
+import Projects from './components/Projects';
+import Freelances from './components/Freelances';
 
+export default function HomeClient({ session }) {
+  const [activeChoice, setActiveChoice] = useState('project');
+
+  if (!session) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main>
-      {session ? (
-        <>
-          <LogoutButton />
-          <h1>Bienvenue, {session.user.name}</h1>
-        </>
-      ) : (
-        <LoginButton />
-      )}
-
-      <h1>Bienvenue sur le Réseau Social pour Freelances</h1>
+      <Header session={session} />
       <nav>
         <ul>
           <li>
-            <Link href="/profile">Profil</Link>
+            <Link href="/projects">Projects</Link>
           </li>
-          <li>
-            <Link href="/projects">Projets</Link>
-          </li>
-          <li>
+          {/* <li>
             <Link href="/feed">Feed</Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
       <UserList />
       <Hero text="I am looking for " />
-        <CtaChoice />
+      <div>
+        <CtaChoice onChange={setActiveChoice} />
+        {activeChoice === 'project' ? <Projects /> : <Freelances />}
+      </div>
     </main>
-  )
+  );
 }

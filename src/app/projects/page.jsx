@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Button from '../components/button';
 
 export default function Projects() {
   const { data: session, status } = useSession();
@@ -50,7 +51,7 @@ export default function Projects() {
           })
         );
       } else {
-        throw new Error(isLiked ? "Erreur lors du retrait du like" : "Erreur lors de l'ajout du like");
+        throw new Error(isLiked ? 'Erreur lors du retrait du like' : "Erreur lors de l'ajout du like");
       }
     } catch (error) {
       setError(error.message);
@@ -92,7 +93,12 @@ export default function Projects() {
   }
 
   if (status === 'unauthenticated') {
-    return <div>Vous devez être connecté pour voir les projets.</div>;
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-screen gap-4">
+        <p>Vous devez être connecté pour voir les projets.</p>
+        <Button text="Go back" href="/" btnStyle="outline" />
+      </div>
+    );
   }
 
   return (
@@ -127,35 +133,22 @@ export default function Projects() {
                       e.target.reset();
                     }}
                   >
-                    <input
-                      type="text"
-                      name="content"
-                      placeholder="Ajouter un commentaire"
-                      required
-                    />
+                    <input type="text" name="content" placeholder="Ajouter un commentaire" required />
                     <button type="submit">Commenter</button>
                   </form>
                 )}
               </div>
               {session && project.clientId === session.user.id && (
                 <>
-                  <button
-                    onClick={() => router.push(`/projects/edit/${project.id}`)}
-                  >
-                    Modifier
-                  </button>
-                  <button onClick={() => handleDelete(project.id)}>
-                    Supprimer
-                  </button>
+                  <button onClick={() => router.push(`/projects/edit/${project.id}`)}>Modifier</button>
+                  <button onClick={() => handleDelete(project.id)}>Supprimer</button>
                 </>
               )}
             </li>
           );
         })}
       </ul>
-      <button onClick={() => router.push('/projects/create')}>
-        Créer un nouveau projet
-      </button>
+      <button onClick={() => router.push('/projects/create')}>Créer un nouveau projet</button>
     </div>
   );
 }

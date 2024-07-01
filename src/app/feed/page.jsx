@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -34,7 +34,7 @@ const Feed = () => {
       if (!res.ok) {
         throw new Error('Failed to like project');
       }
-      const updatedProjects = projects.map(project => {
+      const updatedProjects = projects.map((project) => {
         if (project.id === projectId) {
           return { ...project, likes: project.likes + 1 };
         }
@@ -59,7 +59,7 @@ const Feed = () => {
         throw new Error('Failed to comment on project');
       }
       const comment = await res.json();
-      const updatedProjects = projects.map(project => {
+      const updatedProjects = projects.map((project) => {
         if (project.id === projectId) {
           return { ...project, comments: [...project.comments, comment] };
         }
@@ -85,16 +85,12 @@ const Feed = () => {
     }
   };
 
-  if (!session) {
-    return <p>Vous devez être connecté pour accéder à cette page.</p>;
-  }
-
   return (
     <div>
       <h1>Feed</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div>
-        {projects.map(project => (
+        {projects.map((project) => (
           <div key={project.id}>
             <h2>{project.title}</h2>
             <p>{project.description}</p>
@@ -102,17 +98,19 @@ const Feed = () => {
             <button onClick={() => handleLike(project.id)}>Like ({project.likes})</button>
             <div>
               <h3>Comments</h3>
-              {project.comments.map(comment => (
+              {project.comments.map((comment) => (
                 <div key={comment.id}>
                   <p>{comment.content}</p>
                 </div>
               ))}
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const content = e.target.elements.content.value;
-                handleComment(project.id, content);
-                e.target.reset();
-              }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const content = e.target.elements.content.value;
+                  handleComment(project.id, content);
+                  e.target.reset();
+                }}
+              >
                 <input type="text" name="content" placeholder="Add a comment" required />
                 <button type="submit">Comment</button>
               </form>

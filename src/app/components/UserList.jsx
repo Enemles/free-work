@@ -60,52 +60,53 @@ export default function UserList() {
     }
   };
 
-  if (!session) {
-    return <p>Vous devez être connecté pour voir cette page.</p>;
-  }
+  // if (!session) {
+  //   return <p>Vous devez être connecté pour voir cette page.</p>;
+  // }
 
   return (
-    <div>
-      <h1>Utilisateurs</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div>
-        <h2>Freelancers</h2>
-        <ul>
-          {users.freelancers.map(user => (
-            <li key={user.id}>
-              <Image src={user.profilePictureUrl} alt={`${user.firstName} ${user.lastName}`} width={50} height={50} style={{ borderRadius: '50%' }} />
-              <Link href={`/profile/${user.id}`}>
-                {user.firstName} {user.lastName}
-              </Link>
-              {user.isFollowing ? (
-                <button onClick={() => handleUnfollow(user.id)}>Arrêter de suivre</button>
-              ) : (
-                <button onClick={() => handleFollow(user.id)}>Suivre</button>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-      {session.user.role === 'freelance' && users.clients.length > 0 && (
-        <div>
-          <h2>Clients</h2>
-          <ul>
-            {users.clients.map(user => (
-              <li key={user.id}>
-                <Image src={user.profilePictureUrl} alt={`${user.firstName} ${user.lastName}`} width={50} height={50} style={{ borderRadius: '50%' }} />
-                <Link href={`/profile/${user.id}`}>
-                  {user.firstName} {user.lastName}
-                </Link>
-                {user.isFollowing ? (
-                  <button onClick={() => handleUnfollow(user.id)}>Arrêter de suivre</button>
-                ) : (
-                  <button onClick={() => handleFollow(user.id)}>Suivre</button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    <></>
+    // <div>
+    //   <h1>Utilisateurs</h1>
+    //   {error && <p style={{ color: 'red' }}>{error}</p>}
+    //   <div>
+    //     <h2>Freelancers</h2>
+    //     <ul>
+    //       {users.freelancers.map(user => (
+    //         <li key={user.id}>
+    //           <Image src={user.profilePictureUrl} alt={`${user.firstName} ${user.lastName}`} width={50} height={50} style={{ borderRadius: '50%' }} />
+    //           <Link href={`/profile/${user.id}`}>
+    //             {user.firstName} {user.lastName}
+    //           </Link>
+    //           {user.isFollowing ? (
+    //             <button onClick={() => handleUnfollow(user.id)}>Arrêter de suivre</button>
+    //           ) : (
+    //             <button onClick={() => handleFollow(user.id)}>Suivre</button>
+    //           )}
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
+    //   {session.user.role === 'freelance' && users.clients.length > 0 && (
+    //     <div>
+    //       <h2>Clients</h2>
+    //       <ul>
+    //         {users.clients.map(user => (
+    //           <li key={user.id}>
+    //             <Image src={user.profilePictureUrl} alt={`${user.firstName} ${user.lastName}`} width={50} height={50} style={{ borderRadius: '50%' }} />
+    //             <Link href={`/profile/${user.id}`}>
+    //               {user.firstName} {user.lastName}
+    //             </Link>
+    //             {user.isFollowing ? (
+    //               <button onClick={() => handleUnfollow(user.id)}>Arrêter de suivre</button>
+    //             ) : (
+    //               <button onClick={() => handleFollow(user.id)}>Suivre</button>
+    //             )}
+    //           </li>
+    //         ))}
+    //       </ul>
+    //     </div>
+    //   )}
+    // </div>
   );
 }

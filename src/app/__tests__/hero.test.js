@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Hero from '../components/hero';
+import Hero from '../components/Hero';
 
 describe('Hero component', () => {
   it('renders the Hero form', () => {
