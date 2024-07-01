@@ -2,10 +2,11 @@ version: "3.8"
 
 services:
   postgres:
-    container_name : postgres-dev
     image: postgres:latest
-    env_file:
-      - ./.env.local
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     ports:
       - 5432:5432
     expose:
@@ -22,8 +23,7 @@ services:
       - NODE_ENV=development
     ports:
       - 3000:3000
-    env_file:
-      - ./.env.local
+    env_file: .env
     depends_on:
       - postgres
     volumes:
