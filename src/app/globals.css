@@ -11,6 +11,7 @@
 :root {
   --white: #ffffff;
   --black: #0a0a0a;
+  --grey: #95979d;
 }
 
 @layer components {
@@ -31,7 +32,8 @@
   }
 }
 
-html, body {
+html,
+body {
   background-color: var(--white);
 }
 
@@ -44,4 +46,33 @@ input {
   align-items: center;
   min-height: 35px;
   background-color: var(--white);
+}
+
+.form-input {
+  height: auto;
+  padding: 0;
+  border-bottom: 1px solid var(--black);
+}
+
+.form-input::placeholder {
+  color: var(--grey);
+}
+
+textarea.form-input {
+  resize: none;
+}
+
+.required {
+  position: relative;
+}
+
+.required::after {
+  content: '*';
+  position: absolute;
+  top: 0;
+  right: 25px;
+  color: red;
+  width: 2px;
+  height: 2px;
+  font-size: 10px;
 }

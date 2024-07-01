@@ -13,7 +13,7 @@ export async function POST(req) {
 
     const clientId = token.id;
     const user = await prisma.user.findUnique({
-      where: { id : clientId},
+      where: { id: clientId },
     });
 
     if (!user) {
@@ -68,6 +68,13 @@ export async function GET() {
                 lastName: true,
               },
             },
+          },
+        },
+        Client: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profilePictureUrl: true,
           },
         },
       },

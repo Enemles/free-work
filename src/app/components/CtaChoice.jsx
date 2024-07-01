@@ -11,7 +11,7 @@ export default function CtaChoice({ onChange }) {
   };
 
   return (
-    <div className="flex justify-around items-center w-[70%] m-auto">
+    <div className="flex justify-around items-center w-[70%] m-auto mb-[60px]">
       <div className="flex flex-col items-center">
         <button className={`text-[30px] flex items-center ${active === 'project' ? 'underline' : ''}`} onClick={() => handleChoice('project')}>
           <HiOutlineArrowRight className={`mr-4 w-6 h-6 transition-opacity duration-300 ${active === 'project' ? 'opacity-100' : 'opacity-0'}`} />A project

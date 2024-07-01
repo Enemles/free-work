@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Button from './Button';
 import Search from './Search';
 import { BiSolidUser } from 'react-icons/bi';
+import { MdAddToPhotos } from "react-icons/md";
 
 export default function Header({ session }) {
   return (
@@ -16,7 +17,7 @@ export default function Header({ session }) {
         <Search />
         {session ? (
           <>
-            {/* <h1>Bienvenue, {session.user.name}</h1> */}
+            <Link href="/projects/create"><MdAddToPhotos /></Link>
             <Link href="/profile">
               <BiSolidUser className="text-[20px]" />
             </Link>

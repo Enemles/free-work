@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Button from '../components/button';
+import Header from '../components/Header';
 
 export default function Projects() {
   const { data: session, status } = useSession();
@@ -103,52 +104,56 @@ export default function Projects() {
 
   return (
     <div>
-      <h1>Projets</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <ul>
-        {projects.map((project) => {
-          const isLiked = project.likes?.some((like) => like.userId === session.user.id);
-          return (
-            <li key={project.id}>
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
-              <p>Budget: {project.budget}</p>
-              <p>Status: {project.status}</p>
-              <button onClick={() => handleLike(project.id, isLiked)}>
-                {isLiked ? '-' : '+'} Like ({project.likes?.length || 0})
-              </button>
-              <div>
-                <h3>Commentaires</h3>
-                {project.comments?.map((comment) => (
-                  <div key={comment.id}>
-                    <p>{`${comment.User.firstName} ${comment.User.lastName}: ${comment.content}`}</p>
-                  </div>
-                ))}
-                {session && (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const content = e.target.elements.content.value;
-                      handleComment(project.id, content);
-                      e.target.reset();
-                    }}
-                  >
-                    <input type="text" name="content" placeholder="Ajouter un commentaire" required />
-                    <button type="submit">Commenter</button>
-                  </form>
+      <Header session={session} />
+      <div className="container">
+        <h1 className='text-[60px] flex justify-center'>Post an offer</h1>
+        <div className="h-[1px] relative top-[10px] translate-x-[-50%] left-[50%] bg-[black] w-[50%] mb-[30px]"></div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <ul>
+          {projects.map((project) => {
+            const isLiked = project.likes?.some((like) => like.userId === session.user.id);
+            return (
+              <li key={project.id}>
+                <h2>{project.title}</h2>
+                <p>{project.description}</p>
+                <p>Budget: {project.budget}</p>
+                <p>Status: {project.status}</p>
+                <button onClick={() => handleLike(project.id, isLiked)}>
+                  {isLiked ? '-' : '+'} Like ({project.likes?.length || 0})
+                </button>
+                <div>
+                  <h3>Commentaires</h3>
+                  {project.comments?.map((comment) => (
+                    <div key={comment.id}>
+                      <p>{`${comment.User.firstName} ${comment.User.lastName}: ${comment.content}`}</p>
+                    </div>
+                  ))}
+                  {session && (
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const content = e.target.elements.content.value;
+                        handleComment(project.id, content);
+                        e.target.reset();
+                      }}
+                    >
+                      <input type="text" name="content" placeholder="Ajouter un commentaire" required />
+                      <button type="submit">Commenter</button>
+                    </form>
+                  )}
+                </div>
+                {session && project.clientId === session.user.id && (
+                  <>
+                    <button onClick={() => router.push(`/projects/edit/${project.id}`)}>Modifier</button>
+                    <button onClick={() => handleDelete(project.id)}>Supprimer</button>
+                  </>
                 )}
-              </div>
-              {session && project.clientId === session.user.id && (
-                <>
-                  <button onClick={() => router.push(`/projects/edit/${project.id}`)}>Modifier</button>
-                  <button onClick={() => handleDelete(project.id)}>Supprimer</button>
-                </>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-      <button onClick={() => router.push('/projects/create')}>Créer un nouveau projet</button>
+              </li>
+            );
+          })}
+        </ul>
+        <button onClick={() => router.push('/projects/create')}>Créer un nouveau projet</button>
+      </div>
     </div>
   );
 }

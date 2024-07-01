@@ -1,6 +1,6 @@
 "use client";
 
-export default function Button({ text, href, btnStyle }) {
+export default function ButtonSubmit({ text, btnStyle }) {
   const baseClasses =
     "text-[14px] rounded-[4px] text-center px-[16px] py-[6px] font-normal transition-all w-fit";
 
@@ -10,8 +10,8 @@ export default function Button({ text, href, btnStyle }) {
   };
 
   return (
-      <a href={href} className={`button ${buttonClasses[btnStyle]}`}>
+      <button type="submit" className={`button ${buttonClasses[btnStyle]}`}>
         {text}
-      </a>
+      </button>
     );
 }

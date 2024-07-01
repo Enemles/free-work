@@ -129,7 +129,7 @@ const Profile = () => {
           <img className="rounded-full margin-auto w-[100px]" src={profile.profilePictureUrl} />
           <div className="flex gap-4">
             <span className="text-[60px]">{profile.firstName}</span>
-            <span className="text-[60px]">{profile.lastName || 'UNKNOWN'}</span>
+            <span className="text-[60px]">{profile.lastName || ''}</span>
           </div>
         </div>
         <div className="h-[1px] relative top-[10px] translate-x-[-50%] left-[50%] bg-[black] w-[50%] mb-[30px]"></div>
