@@ -1,0 +1,95 @@
+config:
+  target: http://localhost:3000/api
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up phase
+    - duration: 30
+      arrivalRate: 5
+      rampTo: 10
+      name: Ramp up load
+    - duration: 30
+      arrivalRate: 10
+      rampTo: 20
+      name: Spike phase
+  plugins:
+    ensure: {}
+    apdex: {}
+    expect:
+      reportFailuresAsErrors: true
+      outputFormat: prettyError
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 100
+  ensure:
+    thresholds:
+      - http.response_time.p99: 100
+      - http.response_time.p95: 75
+
+scenarios:
+  - name: Test Page d'Accueil
+    flow:
+      - get:
+          url: '/'
+          headers:
+            Authorization: 'Bearer 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'
+
+  - name: Test Liste des Projets
+    flow:
+      - get:
+          url: '/projects'
+          headers:
+            Authorization: 'Bearer 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'
+
+  - name: Test Création de Projet
+    flow:
+      - post:
+          url: '/projects'
+          headers:
+            Authorization: 'Bearer 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'
+            Content-Type: application/json
+          json:
+            title: 'Test Project'
+            description: 'This is a test project'
+            budget: 1000
+            status: 'active'
+          capture:
+            json: $.id
+            as: projectId
+          expect:
+            - statusCode: 201
+            - json: $.title == 'Test Project'
+            - json: $.description == 'This is a test project'
+      - get:
+          url: '/projects/{{ projectId }}'
+          headers:
+            Authorization: 'Bearer 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'
+          expect:
+            - statusCode: 200
+            - json: $.title == 'Test Project'
+            - json: $.description == 'This is a test project'
+
+  - name: Test Récupération Projet Spécifique
+    flow:
+      - get:
+          url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
+          headers:
+            Authorization: 'Bearer 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'
+
+  - name: Test Mise à Jour Projet
+    flow:
+      - put:
+          url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
+          headers:
+            Authorization: 'Bearer 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'
+            Content-Type: application/json
+          json:
+            title: 'Updated Test Project'
+            description: 'This is an updated test project'
+            budget: 1500
+            status: 'completed'
+          expect:
+            - statusCode: 200
+            - json: $.title == 'Updated Test Project'
+            - json: $.description == 'This is an updated test project'
