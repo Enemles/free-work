@@ -33,21 +33,18 @@ scenarios:
       - get:
           url: '/'
           headers:
-            Authorization: 'Bearer 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'
 
   - name: Test Liste des Projets
     flow:
       - get:
           url: '/projects'
           headers:
-            Authorization: 'Bearer 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'
 
   - name: Test Création de Projet
     flow:
       - post:
           url: '/projects'
           headers:
-            Authorization: 'Bearer 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'
             Content-Type: application/json
           json:
             title: 'Test Project'
@@ -64,7 +61,6 @@ scenarios:
       - get:
           url: '/projects/{{ projectId }}'
           headers:
-            Authorization: 'Bearer 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'
           expect:
             - statusCode: 200
             - json: $.title == 'Test Project'
@@ -75,14 +71,12 @@ scenarios:
       - get:
           url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
           headers:
-            Authorization: 'Bearer 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'
 
   - name: Test Mise à Jour Projet
     flow:
       - put:
           url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
           headers:
-            Authorization: 'Bearer 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'
             Content-Type: application/json
           json:
             title: 'Updated Test Project'
