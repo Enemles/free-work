@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import Header from '../../components/Header';
 import ButtonSubmit from '../../components/ButtonSubmit';
 
@@ -13,25 +14,34 @@ export default function CustomProfile() {
     lastName: '',
     bio: '',
     location: '',
-    profilePictureUrl: ''
+    profilePictureUrl: '',
+    role: '',
+    tjm: '',
   });
   const [error, setError] = useState(null);
   const router = useRouter();
+  const defaultAvatar = '/assets/images/default-avatar.png';
 
   useEffect(() => {
     if (status === 'authenticated' && session) {
       const fetchUser = async () => {
         try {
-          console.log('Fetching user profile for user ID:', session.user.id);
-          const res = await fetch(`/api/profile/${session.user.id}`);
+          const res = await fetch('/api/profile/custom-profile');
           if (!res.ok) {
-            throw new Error('Failed to fetch user');
+            throw new Error('Failed to fetch profile');
           }
           const data = await res.json();
-          console.log('User data fetched successfully:', data);
-          setUser(data);
+          setUser({
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            bio: data.bio || '',
+            location: data.location || '',
+            profilePictureUrl: data.profilePictureUrl || '',
+            role: data.role || '',
+            tjm: data.tjm || '',
+          });
+          console.log('Profile data fetched successfully:', data);
         } catch (error) {
-          console.error('Erreur lors de la récupération des informations utilisateur:', error);
           setError('Erreur lors de la récupération des informations utilisateur');
         }
       };
@@ -47,8 +57,7 @@ export default function CustomProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('Updating user profile with data:', user);
-      const res = await fetch(`/api/profile/${session.user.id}`, {
+      const res = await fetch('/api/profile/custom-profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -56,20 +65,14 @@ export default function CustomProfile() {
         body: JSON.stringify(user),
       });
       if (res.ok) {
-        console.log('User profile updated successfully');
         router.push('/profile');
       } else {
         throw new Error('Erreur lors de la mise à jour du profil');
       }
     } catch (error) {
-      console.error('Erreur lors de la mise à jour du profil:', error);
       setError(error.message);
     }
   };
-
-  if (status === 'loading') {
-    return <p>Chargement...</p>;
-  }
 
   return (
     <div>
@@ -89,11 +92,22 @@ export default function CustomProfile() {
           <div className="flex justify-between gap-5">
             <textarea placeholder="Bio" name="bio" value={user.bio} onChange={handleChange} className="form-input w-[100%]" />
           </div>
+          <div className="flex justify-between gap-5">
+            <input type="text" placeholder="Role" name="role" value={user.role} onChange={handleChange} className="form-input w-[33%]" />
+            <input type="number" placeholder="TJM" name="tjm" value={user.tjm} onChange={handleChange} className="form-input w-[33%]" />
+          </div>
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="flex items-center justify-center">
             <ButtonSubmit text="Update" btnStyle="outline" />
           </div>
         </form>
+        <div className="flex flex-col items-center mt-10">
+          <Image className="rounded-full margin-auto w-[100px]" src={user.profilePictureUrl || defaultAvatar} alt="Profile Picture" width={100} height={100} />
+          <p>Email: {session?.user.email}</p>
+          <p>GitHub ID: {user.githubId}</p>
+          <p>Created At: {new Date(user.createdAt).toLocaleDateString()}</p>
+          <p>Updated At: {new Date(user.updatedAt).toLocaleDateString()}</p>
+        </div>
       </div>
     </div>
   );
