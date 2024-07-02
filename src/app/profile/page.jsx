@@ -1,13 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Header from '../components/Header';
 import { IoStar } from 'react-icons/io5';
+import { FaPen } from 'react-icons/fa6';
 import Button from '../components/button';
+import Image from 'next/image';
 
 const Profile = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
   const [profile, setProfile] = useState({
     firstName: '',
     lastName: '',
@@ -125,8 +130,13 @@ const Profile = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {/* <form className="container text-[black]" onSubmit={handleSubmit}> */}
       <div className="container ">
-        <div className="flex flex-col items-center justify-center gap-5">
-          <img className="rounded-full margin-auto w-[100px]" src={profile.profilePictureUrl} />
+        <div className="relative flex flex-col items-center justify-center gap-5">
+          <div className="absolute top-0 right-0">
+            <button onClick={() => router.push(`/profile/custom-profile`)}>
+              <FaPen className="text-[16px]" />
+            </button>
+          </div>
+          <Image className="rounded-full margin-auto w-[100px]" src={profile.profilePictureUrl} alt="" />
           <div className="flex gap-4">
             <span className="text-[60px]">{profile.firstName}</span>
             <span className="text-[60px]">{profile.lastName || ''}</span>

@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import ButtonSubmit from '../../components/ButtonSubmit';
+import { useSession } from 'next-auth/react';
 
-export default function CreateProject({ session }) {
+export default function CreateProject() {
+  const { data: session, status } = useSession();
+
   const [project, setProject] = useState({
     title: '',
     description: '',
