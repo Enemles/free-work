@@ -1,12 +1,14 @@
-"use client";
+'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const UserProfile = ({ params }) => {
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState(null);
   const router = useRouter();
   const { id } = params;
+  const defaultAvatar = '/images/default-avatar.png';
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -35,14 +37,16 @@ const UserProfile = ({ params }) => {
 
   return (
     <div>
-      <h1>Profil de {profile.firstName} {profile.lastName}</h1>
+      <h1>
+        Profil de {profile.firstName} {profile.lastName}
+      </h1>
       <p>Bio: {profile.bio}</p>
       <p>Location: {profile.location}</p>
-      <img src={profile.profilePictureUrl} alt="Profile Picture" />
+      <Image src={profile.profilePictureUrl || defaultAvatar} alt="" width={50} height={50} />
       <div>
         <h2>Followers ({profile.followers.length})</h2>
         <ul>
-          {profile.followers.map(follower => (
+          {profile.followers.map((follower) => (
             <li key={follower.id}>
               <a href={`/profile/${follower.id}`}>
                 {follower.firstName} {follower.lastName}
@@ -54,7 +58,7 @@ const UserProfile = ({ params }) => {
       <div>
         <h2>Following ({profile.following.length})</h2>
         <ul>
-          {profile.following.map(following => (
+          {profile.following.map((following) => (
             <li key={following.id}>
               <a href={`/profile/${following.id}`}>
                 {following.firstName} {following.lastName}

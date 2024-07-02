@@ -1,29 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 export default function HomeFreelances() {
   const { data: session, status } = useSession();
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      const fetchProjects = async () => {
-        try {
-          const res = await fetch('/api/projects');
-          if (!res.ok) {
-            throw new Error('Erreur lors de la récupération des projets');
-          }
-          const data = await res.json();
-          setProjects(data);
-        } catch (error) {
-          setError(error.message);
-        }
-      };
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     const fetchProjects = async () => {
+  //       try {
+  //         const res = await fetch('/api/projects');
+  //         if (!res.ok) {
+  //           throw new Error('Erreur lors de la récupération des projets');
+  //         }
+  //         const data = await res.json();
+  //         setProjects(data);
+  //       } catch (error) {
+  //         setError(error.message);
+  //       }
+  //     };
 
-      fetchProjects();
-    }
-  }, [status]);
+  //     fetchProjects();
+  //   }
+  // }, [status]);
 
   if (status === 'unauthenticated') {
     return (

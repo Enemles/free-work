@@ -12,6 +12,7 @@ import Image from 'next/image';
 const Profile = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const defaultAvatar = '/images/default-avatar.png';
 
   const [profile, setProfile] = useState({
     firstName: '',
@@ -136,7 +137,7 @@ const Profile = () => {
               <FaPen className="text-[16px]" />
             </button>
           </div>
-          <Image className="rounded-full margin-auto w-[100px]" src={profile.profilePictureUrl} alt="" />
+          <Image className="rounded-full margin-auto w-[100px]" src={profile.profilePictureUrl || defaultAvatar} alt="" width={50} height={50} />
           <div className="flex gap-4">
             <span className="text-[60px]">{profile.firstName}</span>
             <span className="text-[60px]">{profile.lastName || ''}</span>
@@ -159,32 +160,32 @@ const Profile = () => {
           {profile.bio ||
             'Single origin aftertaste to steamed id dark crema et mountain cream. Grinder roast a filter sit that fair siphon milk wings brewed frappuccino ut con. Trade wings a qui milk aftertaste doppio saucer qui espresso foam qui. Filter foam macchiato extraction kopi caffeine est lait that est grounds milk turkish. Café to mazagran redeye grinder rich shop froth trifecta pumpkin french.'}
         </span>
-        <div class="w-full mx-auto mb-8">
+        <div className="w-full mx-auto mb-8">
           <div className="flex flex-col gap-6">
-            <span class="text-[16px]">Skills</span>
-            <div class="slider overflow-x-scroll pb-3">
-              <div class="flex w-max gap-4">
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">HTML</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">CSS</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">JAVASCRIPT</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">REACT</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">Node.js</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">GitHub</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">SCSS</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">VUE.JS</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">MIAOU</div>
-                <div class="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">WAOUF</div>
+            <span className="text-[16px]">Skills</span>
+            <div className="pb-3 overflow-x-scroll slider">
+              <div className="flex gap-4 w-max">
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">HTML</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">CSS</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">JAVASCRIPT</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">REACT</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">Node.js</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">GitHub</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">SCSS</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">VUE.JS</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">MIAOU</div>
+                <div className="w-fit p-3 px-8 text-center border-solid border-[1px] border-[black] rounded-[4px]">WAOUF</div>
               </div>
             </div>
           </div>
         </div>
         <div>
           <div className="flex flex-col gap-5">
-            <span class="text-[16px]">Reviews</span>
+            <span className="text-[16px]">Reviews</span>
             <div className="flex flex-col p-[20px] bg-[white] [box-shadow:0px_0px_60px_-20px_rgba(0,_0,_0,_0.4)] rounded-[10px]">
-              <div class="flex w-[100%] gap-4 ">
+              <div className="flex w-[100%] gap-4 ">
                 <div className="flex items-center gap-2 mb-4">
-                  <img className="rounded-full w-[40px]" src={profile.profilePictureUrl} />
+                  <Image className="rounded-full w-[40px]" src={profile.profilePictureUrl || defaultAvatar} alt="" width={50} height={50} />
                   <div className="flex flex-col leading-none">
                     <span>Jame Brown</span>
                     <span className="text-[12px] text-[grey]">@jamebrown</span>
@@ -204,9 +205,9 @@ const Profile = () => {
               </span>
             </div>
             <div className="flex flex-col p-[20px] bg-[white] [box-shadow:0px_0px_60px_-20px_rgba(0,_0,_0,_0.4)] rounded-[10px]">
-              <div class="flex w-[100%] gap-4 ">
+              <div className="flex w-[100%] gap-4 ">
                 <div className="flex items-center gap-2 mb-4">
-                  <img className="rounded-full w-[40px]" src={profile.profilePictureUrl} />
+                  <Image className="rounded-full w-[40px]" src={profile.profilePictureUrl || defaultAvatar} width={50} height={50} alt="" />
                   <div className="flex flex-col leading-none">
                     <span>Jame Brown</span>
                     <span className="text-[12px] text-[grey]">@jamebrown</span>
@@ -226,9 +227,9 @@ const Profile = () => {
               </span>
             </div>
             <div className="flex flex-col p-[20px] bg-[white] [box-shadow:0px_0px_60px_-20px_rgba(0,_0,_0,_0.4)] rounded-[10px]">
-              <div class="flex w-[100%] gap-4 ">
+              <div className="flex w-[100%] gap-4 ">
                 <div className="flex items-center gap-2 mb-4">
-                  <img className="rounded-full w-[40px]" src={profile.profilePictureUrl} />
+                  <Image className="rounded-full w-[40px]" src={profile.profilePictureUrl || defaultAvatar} width={50} height={50} alt="" />
                   <div className="flex flex-col leading-none">
                     <span>Jame Brown</span>
                     <span className="text-[12px] text-[grey]">@jamebrown</span>
@@ -252,9 +253,9 @@ const Profile = () => {
             <Button text="Voir plus" href="/" btnStyle="outline" />
           </div>
         </div>
-        <div class="w-full mx-auto mb-8">
+        <div className="w-full mx-auto mb-8">
           <div className="flex flex-col gap-6">
-            <span class="text-[16px]">Worked on </span>
+            <span className="text-[16px]">Worked on </span>
           </div>
         </div>
         {/* <div>
