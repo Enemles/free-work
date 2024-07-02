@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Header from '../../../components/Header';
 import ButtonSubmit from '../../../components/ButtonSubmit';
+import { useSession } from 'next-auth/react';
 
-export default function EditProject({ session }) {
+export default function EditProject() {
+  const { data: session, status } = useSession();
   const { id } = useParams();
   const [project, setProject] = useState({
     title: '',

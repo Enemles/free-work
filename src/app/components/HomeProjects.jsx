@@ -123,7 +123,7 @@ export default function HomeProjects() {
                 <li key={project.id} className="w-4/5 mx-[auto] my-[0] border-b-[1px] border-b-[solid] border-b-[black] pb-[30px]">
                   <div className="flex items-center justify-between gap-2 mb-[20px]">
                     <div className="flex items-center gap-2">
-                      <Image src={project.Client.profilePictureUrl} alt="Img" className="w-[30px] rounded-[50%]" />
+                      <Image src={project.Client.profilePictureUrl} alt="Img" className="w-[30px] rounded-[50%]" width={50} height={50} />
                       <p className="leading-none">
                         {project.Client.firstName} {project.Client.lastName}
                       </p>
