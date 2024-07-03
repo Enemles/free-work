@@ -41,7 +41,7 @@ Bienvenue sur le Réseau Social pour Freelances, une application permettant aux 
 
 ### Prérequis
 
-- Node.js (version 14 ou supérieure)
+- Node.js (version 20 ou supérieure)
 - Docker
 - Docker Compose
 
@@ -50,8 +50,8 @@ Bienvenue sur le Réseau Social pour Freelances, une application permettant aux 
 1. Clonez le dépôt
 
   ```sh
-  git clone https://github.com/votre-utilisateur/votre-repo.git
-  cd votre-repo
+  git clone git@github.com:Enemles/free-work.git
+  cd free-work
   ```
 
 2. Installez les dépendances
