@@ -35,3 +35,25 @@
 //     }
 //   }
 // }
+
+// cypress/support/commands.ts
+Cypress.Commands.add('loginByGithub', () => {
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:3000/api/auth/callback/github',
+    body: {
+      code: 'mocked_code',
+    },
+  }).then((res) => {
+    const token = res.body.token || 'mocked_token';
+
+    // Définir le cookie avec les attributs corrects
+    cy.setCookie('next-auth.session-token', token, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: false, // Assurez-vous que ce n'est pas HTTP only pour Cypress
+      secure: false, // Assurez-vous que ce n'est pas sécurisé pour l'environnement de test
+    });
+  });
+});
+

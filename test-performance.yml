@@ -13,6 +13,9 @@ config:
       arrivalRate: 10
       rampTo: 20
       name: Spike phase
+  defaults:
+    headers:
+      authorization: 'Bearer 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'
   plugins:
     ensure: {}
     apdex: {}
@@ -32,13 +35,11 @@ scenarios:
     flow:
       - get:
           url: '/'
-          headers:
 
   - name: Test Liste des Projets
     flow:
       - get:
           url: '/projects'
-          headers:
 
   - name: Test Création de Projet
     flow:
@@ -60,7 +61,6 @@ scenarios:
             - json: $.description == 'This is a test project'
       - get:
           url: '/projects/{{ projectId }}'
-          headers:
           expect:
             - statusCode: 200
             - json: $.title == 'Test Project'
@@ -70,7 +70,6 @@ scenarios:
     flow:
       - get:
           url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
-          headers:
 
   - name: Test Mise à Jour Projet
     flow:

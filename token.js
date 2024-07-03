@@ -26,7 +26,7 @@ async function getGithubToken(code) {
   }
 }
 
-getGithubToken("7ce78c5c544ef43dcba3")
+getGithubToken('e7521ea8045252bbe370')
   .then(token => {
     console.log('Your GitHub Token:', token);
   })
