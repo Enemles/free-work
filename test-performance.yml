@@ -65,14 +65,14 @@ scenarios:
   - name: Test Récupération Projet Spécifique
     flow:
       - get:
-          url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
+          url: '/projects/1'
           headers:
             Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
 
   - name: Test Mise à Jour Projet
     flow:
       - put:
-          url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
+          url: '/projects/1'
           headers:
             Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
             Content-Type: application/json
