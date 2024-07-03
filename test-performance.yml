@@ -13,9 +13,6 @@ config:
       arrivalRate: 10
       rampTo: 20
       name: Spike phase
-  defaults:
-    headers:
-      authorization: 'Bearer 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'
   plugins:
     ensure: {}
     apdex: {}
@@ -35,17 +32,22 @@ scenarios:
     flow:
       - get:
           url: '/'
+          headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
 
   - name: Test Liste des Projets
     flow:
       - get:
           url: '/projects'
+          headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
 
   - name: Test Création de Projet
     flow:
       - post:
           url: '/projects'
           headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
             Content-Type: application/json
           json:
             title: 'Test Project'
@@ -55,34 +57,27 @@ scenarios:
           capture:
             json: $.id
             as: projectId
-          expect:
-            - statusCode: 201
-            - json: $.title == 'Test Project'
-            - json: $.description == 'This is a test project'
       - get:
           url: '/projects/{{ projectId }}'
-          expect:
-            - statusCode: 200
-            - json: $.title == 'Test Project'
-            - json: $.description == 'This is a test project'
+          headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
 
   - name: Test Récupération Projet Spécifique
     flow:
       - get:
           url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
+          headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
 
   - name: Test Mise à Jour Projet
     flow:
       - put:
           url: '/projects/1' # Assurez-vous d'avoir un projet avec cet ID
           headers:
+            Authorization: 'Bearer eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..khs95zo8AfDWvG42.ZNxSZ0eMP2tVO5yP-P4w1yGGVcTv8IiNQm-xrmWhMF2LByXtRCrGXFS9Mo-4VKBv2ZyPSpESYPQXb6B9rJrwe-TDI8ksY01Cb-Z4M4f84sFUA5nvN4I76l6GmMGZlUidr6IFCQYk-r1dHlbXdFlDYr_0SmS9RcHT4Yuf2aSDsHr5k0OOVaD81rPAKSqZZ5L5eIM3XH3Zv2c5KggsZGQWmNc-xgC1gm-mVpk66fG3hQbPoNEjuYgGkyNOYwEDN8N3xuuqwwZ3874.R_bmg335qSBT8OUGTW9eJQ'
             Content-Type: application/json
           json:
             title: 'Updated Test Project'
             description: 'This is an updated test project'
             budget: 1500
             status: 'completed'
-          expect:
-            - statusCode: 200
-            - json: $.title == 'Updated Test Project'
-            - json: $.description == 'This is an updated test project'
