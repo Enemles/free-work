@@ -1,0 +1,44 @@
+name: Performance and E2E Tests
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run performance tests
+        run: npm run test:performance
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start application
+        run: npm run dev
+
+      - name: Run E2E tests
+        run: npm run cypress:run
